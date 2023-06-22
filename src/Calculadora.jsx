@@ -31,19 +31,16 @@ export default class Calculadora extends Component {
     }
 
     apagarDigito = () => {
-        try {
-            const valor = this.state.valorDisplay
-            if (valor === "0") {
-                return;
-            }
-            const valorArray = valor.split("");
-            valorArray.pop();
-            const novoValor = valorArray.join("");
-            const novosValores = [...this.state.valoresMemoria];
-            novosValores[this.state.casaAtual] = parseFloat(novoValor);
-            this.setState({ valorDisplay: novoValor || "0", valoresMemoria: novosValores });
-        } catch (error) {
+        const valor = this.state.valorDisplay
+        if (valor === "0") {
+            return;
         }
+        const valorArray = valor.split("");
+        valorArray.pop();
+        const novoValor = valorArray.join("");
+        const novosValores = [...this.state.valoresMemoria];
+        novosValores[this.state.casaAtual] = parseFloat(novoValor);
+        this.setState({ valorDisplay: novoValor || "0", valoresMemoria: novosValores });
     }
 
     adicionarValores = (digito) => {
@@ -78,6 +75,10 @@ export default class Calculadora extends Component {
             try {
                 // eslint-disable-next-line no-eval
                 valores[0] = eval(`${valores[0]} ${operacaoAtual} ${valores[1]}`);
+                if (isNaN(valores[0])) {
+                    this.limparMemoria()
+                    return
+                }
             } catch (err) { console.log(err) }
             valores[1] = 0;
 
